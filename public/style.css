@@ -1,0 +1,464 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+header {
+    width: 100%;
+    max-width: 960px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #5c6ac4;
+    margin-bottom: 0.5em;
+}
+
+.message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    color: #ffffff;
+    text-align: center;
+}
+
+.message.error {
+    background-color: #ff3860;
+    color: white;
+}
+
+.message.info {
+    background-color: #209cee;
+}
+
+.validation-errors {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #ffebee;
+    border: 1px solid #f44336;
+    border-radius: 4px;
+    color: #f44336;
+}
+
+
+.validation-errors ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.validation-errors li {
+    margin-bottom: 5px;
+}
+
+.error {
+    color: #d32f2f;
+    /* Dark red color for error text */
+    background-color: #ffcdd2;
+    /* Light red background color */
+    border-color: #f44336;
+    /* Red border color */
+    border-radius: 4px;
+    /* Rounded corners for the error box */
+    padding: 10px;
+    /* Padding inside the error box */
+    margin: 10px 0;
+    /* Margin around the error box */
+    font-weight: bold;
+    /* Make error text bold */
+    text-align: center;
+    /* Center-align the error text */
+}
+
+.clear-all-button {
+    margin-top: 20px !important;
+    background-color: #ff3860 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    transition: background-color 0.3s ease !important;
+    display: inline-block;
+    text-align: center;
+}
+
+.clear-all-button:hover {
+    background-color: #e12f4c !important;
+}
+
+.settings-button,
+.back-button {
+    padding: 10px 20px;
+    background-color: #5c6ac4;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.settings-button:hover,
+.back-button:hover {
+    background-color: #4a57a3;
+}
+
+main {
+    width: 100%;
+    max-width: 960px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+select,
+input,
+button:not(.settings-button, .back-button) {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+button:not(.settings-button, .back-button) {
+    background-color: #5c6ac4;
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+
+button:not(.settings-button, .back-button):hover {
+    background-color: #4a57a3;
+}
+
+.remove-button {
+    width: 150px !important;
+    padding: 10px !important;
+    background-color: #5c6ac4;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-75%);
+}
+
+.timer-display {
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #e9ecef;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+/* li {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+} */
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+.exercise-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-button,
+.delete-button {
+    padding: 0;
+    background-color: #5c6ac4;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.edit-button img,
+.delete-button img {
+    height: 20px;
+    width: 20px;
+}
+
+.exercise-list {
+    width: 100%;
+}
+
+.exercise-text {
+    margin-right: auto;
+    max-width: 120px;
+}
+
+.workout-days-list .workout-day-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.day-name {
+    margin-right: auto;
+    /* This pushes the buttons to the right */
+}
+
+.collapsible {
+    background-color: #e9ecef;
+    color: #333;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.collapsible::after {
+    content: '\25BC';
+    font-size: 1.5rem;
+    line-height: 1;
+    transition: transform 0.3s ease-in-out;
+}
+
+.collapsible.active::after {
+    transform: rotate(180deg);
+}
+
+.exerciseTitle {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.exercise-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+
+@media (min-width: 768px) {
+    .exercise-details {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    li {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+}
+
+.input-group input {
+    padding: 8px;
+    text-align: center;
+}
+
+.content-spacing {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#logout {
+    background-color: #ff3860 !important;
+}
+
+#logout:hover {
+    background-color: #dd2046 !important;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: relative;
+    background-color: #ffffff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+}
+
+
+.modal-content button {
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.modal-content button:hover {
+    opacity: 0.9;
+}
+
+/* Style for the modal close button */
+.modal-close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+img {
+    height: 32px;
+    width: 32px;
+}
+
+.day-name,
+.exercise-name {
+    margin-right: auto;
+}
+
+.edit-delete-container {
+    display: flex;
+    gap: 10px;
+}
+
+/* Style for the buttons */
+.edit-button,
+.delete-button {
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 1em;
+
+}
+
+.edit-button {
+    left: 100%;
+    margin-right: 0;
+}
+
+/* Style for the images inside the buttons */
+.edit-button img,
+.delete-button img {
+    height: 28px;
+    width: 28px;
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        margin: 20% auto;
+        width: 80%;
+    }
+}
+
+@media (max-width: 767px) {
+    .view-previous-workouts li {
+        padding: 10px;
+        gap: 5px;
+    }
+
+    .view-previous-workouts h3,
+    .view-previous-workouts h4,
+    .view-previous-workouts p {
+        margin-bottom: 5px;
+    }
+
+    .view-previous-workouts ul {
+        padding-left: 20px;
+    }
+}

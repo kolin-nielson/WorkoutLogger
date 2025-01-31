@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Logger</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app">
+        <div v-if="message.content" :class="`message ${message.type}`">{{ message.content }}</div>
+        <!-- Home View -->
+        <div v-show="currentView === 'home'">
+            <header>
+                <h1>Workout Logger</h1>
+                <button class="settings-button" @click="switchView('settingsMenu')">Menu</button>
+            </header>
+            <main>
+                <h2>Select Workout Day</h2>
+                <select v-model="selectedDayId" :disabled="workoutInProgress">
+                    <option disabled value="">Please select one</option>
+                    <option v-for="day in workoutPlan.workoutDays" :value="day._id" :key="day._id">{{ day.dayName }}
+                    </option>
+                </select>
+                <button v-if="!workoutInProgress && selectedDayId" @click="startWorkout">Start Workout</button>
+                <div class="timer-display" v-if="workoutInProgress || workoutTime">
+                    Timer: {{ formattedWorkoutTime }}
+                </div>
+                <div v-if="selectedDayId && workoutInProgress">
+                    <h3>Exercises for {{ selectedWorkoutDayName }}</h3>
+                    <ul>
+                        <li v-for="(exercise, index) in currentWorkoutSession.exercises" :key="index">
+                            <div class="exerciseTitle">{{ exercise.name }}</div>
+                            <div class="exercise-details">
+                                <label>Weight: <input type="number" v-model="exercise.weight"></label>
+                                <label>Sets: <input type="number" v-model="exercise.sets"></label>
+                                <label>Reps: <input type="number" v-model="exercise.reps"></label>
+                            </div>
+                        </li>
+                    </ul>
+                    <button @click="validateAndSubmitWorkout">Finish Workout</button>
+                    <button v-if="workoutInProgress" @click="cancelWorkout">Cancel Workout</button>
+                    <div v-if="validationErrors.length" class="validation-errors">
+                        <ul>
+                            <li v-for="error in validationErrors" :key="error">{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div v-show="currentView === 'settingsMenu'">
+            <header>
+                <h1>Menu</h1>
+                <button class="back-button" @click="switchView('home')">Back</button>
+            </header>
+            <main>
+                <button @click="switchView('modifyWorkoutDays')">Split</button>
+                <button @click="switchView('modifyExercises')">Exercises</button>
+                <button @click="switchView('viewPreviousWorkouts');fetchWorkoutSessions();">Previous Workouts</button>
+                <button id="logout" @click="logout">Logout</button>
+            </main>
+        </div>
+        <div v-show="currentView === 'modifyWorkoutDays'">
+            <header>
+                <h1>Modify Workout Days</h1>
+                <button class="back-button" @click="switchView('settingsMenu')">Back</button>
+            </header>
+            <main>
+                <input type="text" v-model="newWorkoutDayName" placeholder="Enter new workout day name">
+                <button @click="addWorkoutDay">Add Workout Day</button>
+                <ul class="workout-days-list">
+                    <li v-for="day in workoutPlan.workoutDays" :key="day._id" class="workout-day-item">
+                        <span class="day-name">{{ day.dayName }}</span>
+                        <div class="button-container">
+                            <!-- <button class="edit-button" @click="startEdit('workoutDay', day)">
+                                <img src="images/image (3).png" alt="Edit">
+                              </button> -->
+                            <button class="delete-button" @click="removeWorkoutDay(day.dayName)">
+                                <img src="images/image (4).png" alt="Delete">
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+                <button class="clear-all-button" @click="clearWorkoutDays">Clear All Workout Days</button>
+            </main>
+        </div>
+        <div v-show="currentView === 'modifyExercises'">
+            <header>
+                <h1>Modify Exercises</h1>
+                <button class="back-button" @click="switchView('settingsMenu')">Back</button>
+            </header>
+            <main>
+                <select v-model="selectedDayIdForExercise">
+                    <option disabled value="">Select a day</option>
+                    <option v-for="day in workoutPlan.workoutDays" :value="day._id">{{ day.dayName }}</option>
+                </select>
+                <input type="text" v-model="newExerciseName" placeholder="Enter new exercise name">
+                <button @click="addExercise">Add Exercise</button>
+                <ul class="exercise-list">
+                    <li v-for="exercise in selectedDayExercises" :key="exercise.name" class="exercise-item">
+                        <span class="exercise-text">{{ exercise }}</span>
+                        <div class="button-container">
+                            <!-- <button class="edit-button" @click="startEdit('exercise', { dayId: selectedDayIdForExercise, exercise })">
+                                <img src="images/image (3).png" alt="Edit">
+                              </button> -->
+                            <button class="delete-button" @click="removeExercise(selectedWorkoutDayName, exercise)">
+                                <img src="images/image (4).png" alt="Delete">
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </main>
+        </div>
+        <div v-show="currentView === 'viewPreviousWorkouts'">
+            <header>
+                <h1>Previous Workouts</h1>
+                <button class="back-button" @click="switchView('settingsMenu')">Back</button>
+            </header>
+            <main>
+                <div v-for="day in workoutDays" :key="day.name">
+                    <button class="collapsible" @click="toggleCollapse(day.name)">{{ day.name }}</button>
+                    <div class="content" v-if="day.isCollapsed">
+                        <ul>
+                            <li v-for="session in getLastThreeSessions(day.name)" :key="session._id">
+                                <h3>{{ new Date(session.date).toLocaleDateString() }} - {{ new
+                                    Date(session.date).toLocaleTimeString() }}</h3>
+                                <p>Total Time: {{ session.totalTime }} seconds</p>
+                                <h4>Exercises</h4>
+                                <ul>
+                                    <li v-for="exercise in session.exercises" :key="exercise.name">
+                                        <strong>{{ exercise.name }}</strong>: {{ exercise.sets }} sets of {{
+                                        exercise.reps }} reps at {{ exercise.weight }} lbs
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="clear-all-button" @click="clearAllWorkoutSessions">Clear All Previous Workouts</button>
+
+            </main>
+        </div>
+
+        <!-- Login View -->
+        <div v-show="currentView === 'login'">
+            <header>
+                <h1>Workout Logger</h1>
+            </header>
+            <main>
+                <input type="email" v-model="loginUser.email" placeholder="Email">
+                <input type="password" v-model="loginUser.password" placeholder="Password">
+                <button @click="login">Login</button>
+                <p>Need an account? <button @click="switchView('register')">Register</button></p>
+            </main>
+        </div>
+
+        <!-- Register View -->
+        <div v-show="currentView === 'register'">
+            <header>
+                <h1>Register for Workout Logger</h1>
+            </header>
+            <main>
+                <input type="text" v-model="newUser.firstName" placeholder="First Name">
+                <input type="text" v-model="newUser.lastName" placeholder="Last Name">
+                <input type="email" v-model="newUser.email" placeholder="Email" @input="validateEmail">
+                <input type="password" v-model="newUser.password" placeholder="Password" @input="validatePassword">
+                <input type="password" v-model="newUser.confirmPassword" placeholder="Confirm Password"
+                    @input="validatePassword">
+                <div v-if="validationErrors.length > 0">
+                    <p class="error" v-for="error in validationErrors" :key="error">{{ error }}</p>
+                </div>
+                <button @click="register">Register</button>
+                <p>Already have an account? <button @click="switchView('login')">Login</button></p>
+            </main>
+        </div>
+
+
+        <!-- Modify Workout Days Edit Modal -->
+        <div v-if="isEditing" class="modal" :style="{display: isEditing ? 'block' : 'none'}">
+            <div class="modal-content">
+                <h2>Edit Name</h2>
+                <input type="text" v-model="tempEditName">
+                <button @click="updateEdit">Update</button>
+                <button @click="cancelEdit">Cancel</button>
+            </div>
+        </div>
+
+
+
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
