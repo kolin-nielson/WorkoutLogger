@@ -1,5 +1,8 @@
 # Workout Logger
 
+https://workoutlogger-s5dl.onrender.com/
+(Render is a free service hosting and needs time to spin up if not used for awhile)
+
 A comprehensive web application designed to track and manage individual workout sessions. Users can create workout plans, log workouts, view past sessions, and customize their workout experience with advanced features.
 
 ## Features
@@ -52,7 +55,7 @@ A comprehensive web application designed to track and manage individual workout 
 
 ## Deployment
 
-This application is deployed on [Render](https://render.com/). Access the live application at [https://workoutlogger.onrender.com/](https://workoutlogger.onrender.com/).
+This application is deployed on [Render](https://render.com/). Access the live application at https://workoutlogger-s5dl.onrender.com/
 
 ## Getting Started
 
@@ -60,4 +63,4 @@ To get started with the Workout Logger:
 
 1. Visit the live application link.
 2. Register for a new account or log in.
-3. Start tracking your workouts and progress!
+3. Create and start tracking your workouts!
