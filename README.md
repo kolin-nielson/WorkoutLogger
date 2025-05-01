@@ -1,11 +1,9 @@
 # Workout Logger
 
-<<<<<<< HEAD
 ![Workout Logger Screenshot](/1.png)
-=======
+
 https://workoutlogger-s5dl.onrender.com/
 (Render is a free service hosting and needs time to spin up if not used for awhile)
->>>>>>> 43f8b3a60091742ab26083de6d187e2f6087dd55
 
 A comprehensive web application designed to track and manage individual workout sessions. Users can create workout plans, log workouts, view past sessions, and customize their workout experience with advanced features.
 
