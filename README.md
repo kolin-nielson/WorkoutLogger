@@ -1,6 +1,11 @@
 # Workout Logger
 
+<<<<<<< HEAD
 ![Workout Logger Screenshot](/1.png)
+=======
+https://workoutlogger-s5dl.onrender.com/
+(Render is a free service hosting and needs time to spin up if not used for awhile)
+>>>>>>> 43f8b3a60091742ab26083de6d187e2f6087dd55
 
 A comprehensive web application designed to track and manage individual workout sessions. Users can create workout plans, log workouts, view past sessions, and customize their workout experience with advanced features.
 
@@ -92,7 +97,11 @@ This application is deployed on [Render](https://render.com/). Access the live a
 
 ## 🚀 Getting Started
 
+<<<<<<< HEAD
 ### Prerequisites
+=======
+This application is deployed on [Render](https://render.com/). Access the live application at https://workoutlogger-s5dl.onrender.com/
+>>>>>>> 43f8b3a60091742ab26083de6d187e2f6087dd55
 
 - Node.js (v14 or higher)
 - MongoDB account or local MongoDB installation
@@ -100,6 +109,7 @@ This application is deployed on [Render](https://render.com/). Access the live a
 
 ### Local Development
 
+<<<<<<< HEAD
 1. Clone the repository:
 
    ```bash
@@ -148,3 +158,8 @@ This project is licensed under the ISC License.
 ## 👨‍💻 Author
 
 - **Kolin Nielson** - [GitHub](https://github.com/kolin-nielson)
+=======
+1. Visit the live application link.
+2. Register for a new account or log in.
+3. Create and start tracking your workouts!
+>>>>>>> 43f8b3a60091742ab26083de6d187e2f6087dd55
